@@ -2,9 +2,9 @@
   config,
   pkgs,
   host,
+  lib,
   username,
   options,
-  lib,
   ...
 }:
 let
@@ -15,7 +15,6 @@ in
     ./hardware.nix
     ./users.nix
     ../../modules/amd-drivers.nix
-    ../../modules/apple-silicon-support
     ../../modules/nvidia-drivers.nix
     ../../modules/nvidia-prime-drivers.nix
     ../../modules/intel-drivers.nix
@@ -25,7 +24,7 @@ in
 
   boot = {
     # Kernel
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_zen;
     # This is for OBS Virtual Cam Support
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
@@ -82,16 +81,16 @@ in
     cursor.size = 24;
     fonts = {
       monospace = {
-        package = pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; };
-        name = "JetBrainsMono Nerd Font Mono";
+        package = pkgs.nerd-fonts.monaspace;
+        name = "MonaspiceKr Nerd Font Mono";
       };
       sansSerif = {
-        package = pkgs.montserrat;
-        name = "Montserrat";
+        package = pkgs.nerd-fonts.monaspace;
+        name = "MonaspiceNe Nerd Font";
       };
       serif = {
-        package = pkgs.montserrat;
-        name = "Montserrat";
+        package = pkgs.nerd-fonts.monaspace;
+        name = "MonaspiceXe Nerd Font";
       };
       sizes = {
         applications = 12;
@@ -103,44 +102,46 @@ in
   };
 
   # Extra Module Options
-  drivers.amdgpu.enable = false;
-  drivers.nvidia.enable = false;
-  drivers.nvidia-prime = {
-    enable = false;
-    intelBusID = "";
-    nvidiaBusID = "";
-  };
-  drivers.intel.enable = false;
+  # drivers.amdgpu.enable = false;
+  # drivers.nvidia.enable = true;
+  # hardware.nvidia.open = true;
+
+  # drivers.nvidia-prime = {
+  #   enable = false;
+  #   intelBusID = "";
+  #   nvidiaBusID = "";
+  # };
+  # drivers.intel.enable = false;
   vm.guest-services.enable = false;
-  local.hardware-clock.enable = false;
-  # Apple Hardware
-  hardware.asahi.useExperimentalGPUDriver = true;
-  hardware.asahi.peripheralFirmwareDirectory = ../../modules/firmware;
+  local.hardware-clock.enable = true;
 
   # Enable networking
-  networking.wireless.iwd = {
-    enable = true;
-    settings.General.EnableNetworkConfiguration = true;
+  networking = {
+    networkmanager = {
+      enable = lib.mkDefault true;
+      wifi.backend = lib.mkForce "iwd";
+    };
+    wireless.iwd.enable = lib.mkForce true;
   };
   networking.hostName = host;
   networking.timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
 
   # Set your time zone.
-  time.timeZone = "America/Chicago";
+  time.timeZone = "Europe/Berlin";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
+    LC_ADDRESS = "de_DE.UTF-8";
+    LC_IDENTIFICATION = "de_DE.UTF-8";
+    LC_MEASUREMENT = "de_DE.UTF-8";
+    LC_MONETARY = "de_DE.UTF-8";
+    LC_NAME = "de_DE.UTF-8";
+    LC_NUMERIC = "de_DE.UTF-8";
+    LC_PAPER = "de_DE.UTF-8";
+    LC_TELEPHONE = "de_DE.UTF-8";
+    LC_TIME = "de_DE.UTF-8";
   };
 
   programs = {
@@ -223,6 +224,12 @@ in
       enableSSHSupport = true;
     };
     virt-manager.enable = true;
+    steam = {
+      enable = true;
+      gamescopeSession.enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
     thunar = {
       enable = true;
       plugins = with pkgs.xfce; [
@@ -239,9 +246,42 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    alarm-clock-applet
+    alacritty # fallback term
+    google-chrome
+    zellij # better tmux
+    yazi # tui file manager
+    fd # file searching
+    fzf # quick file subtree navigation
+    ripgrep # file content searching
+    zoxide # modern cd replacement
+    imagemagick # svg, font, heic and jpeg xl preview in yazi
+    poppler # pdf preview
+    jq # json preview
+    p7zip-rar # archive extraction and preview
+    ffmpeg # because the entire world of video runs on ffmpeg
+    # wine prefix managers
+    bottles
+    lutris
+    heroic
+    protonup # protonGE installer
+    mangohud # ingame performance hud
+    microsoft-edge # work browser
+    qbittorrent # :)
+    meld # best diff-tool ever
+    obsidian # best markdown editor ever
+    vesktop # hopefully this works with hyprland portal lol
+    ## some dev stuff
+    ## commented out -> try devshells first uwu
+    # gcc
+    # dotnetCorePackages.dotnet_9.sdk
+    # dotnetCorePackages.dotnet_9.runtime
+    # rustup
+    ## distro
     vim
     wget
     killall
+    docker-compose
     eza
     git
     cmatrix
@@ -260,10 +300,8 @@ in
     ncdu
     wl-clipboard
     pciutils
-    ffmpeg
     socat
     cowsay
-    ripgrep
     lshw
     bat
     pkg-config
@@ -274,6 +312,7 @@ in
     virt-viewer
     swappy
     appimage-run
+    networkmanagerapplet
     yad
     inxi
     playerctl
@@ -290,6 +329,7 @@ in
     gimp
     pavucontrol
     tree
+    spotify
     neovide
     greetd.tuigreet
   ];
@@ -297,7 +337,7 @@ in
   fonts = {
     packages = with pkgs; [
       noto-fonts-emoji
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       font-awesome
       symbola
       material-icons
@@ -307,6 +347,7 @@ in
   environment.variables = {
     ZANEYOS_VERSION = "2.3";
     ZANEYOS = "true";
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/${username}/.steam/root/compatibilitytools.d";
   };
 
   # Extra Portal Configuration
@@ -338,12 +379,12 @@ in
       vt = 3;
       settings = {
         default_session = {
-          # Wayland Desktop Manager is installed only for user ryan via home-manager!
+          # Wayland Desktop Manager is installed only for user via home-manager!
           user = username;
           # .wayland-session is a script generated by home-manager, which links to the current wayland compositor(sway/hyprland or others).
           # with such a vendor-no-locking script, we can switch to another wayland compositor without modifying greetd's config here.
           # command = "$HOME/.wayland-session"; # start a wayland session directly without a login manager
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland"; # start Hyprland with a TUI login manager
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --user-menu --time --cmd Hyprland"; # start Hyprland with a TUI login manager
         };
       };
     };
@@ -390,22 +431,24 @@ in
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     '';
   };
-  hardware.sane = {
-    enable = true;
-    extraBackends = [ pkgs.sane-airscan ];
-    disabledDefaultBackends = [ "escl" ];
-  };
+    # hardware.sane = {
+    #   enable = true;
+    #   extraBackends = [ pkgs.sane-airscan ];
+    #   disabledDefaultBackends = [ "escl" ];
+    # };
 
   # Extra Logitech Support
-  hardware.logitech.wireless.enable = false;
-  hardware.logitech.wireless.enableGraphical = false;
+  hardware.logitech.wireless.enable = true;
+  hardware.logitech.wireless.enableGraphical = true;
 
   # Bluetooth Support
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
-  hardware.pulseaudio.enable = false;
-  
+
+  # Enable sound with pipewire.
+  services.pulseaudio.enable = false;
+
   # Security / Polkit
   security.rtkit.enable = true;
   security.polkit.enable = true;
@@ -451,16 +494,12 @@ in
 
   # Virtualization / Containers
   virtualisation.libvirtd.enable = true;
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-  };
+  virtualisation.docker.enable = true;
 
   # OpenGL
   hardware.graphics = {
     enable = true;
-    enable32Bit = false;
+    enable32Bit = true;
   };
 
   console.keyMap = "${consoleKeyMap}";
@@ -477,5 +516,5 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 }
