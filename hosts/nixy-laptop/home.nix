@@ -5,17 +5,18 @@
   ...
 }:
 let
-  inherit (import ./variables.nix) gitUsername gitEmail;
+  inherit (import ./variables.nix) gitUsername gitEmail gitSigningKey;
 in
 {
   # Home Manager Settings
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.11";
 
   # Import Program Configurations
   imports = [
     ../../config/emoji.nix
+    ../../config/fastfetch
     ../../config/hyprland.nix
     ../../config/neovim.nix
     ../../config/rofi/rofi.nix
@@ -24,7 +25,6 @@ in
     ../../config/swaync.nix
     ../../config/waybar.nix
     ../../config/wlogout.nix
-    ../../config/fastfetch
   ];
 
   # Place Files Inside Home Directory
@@ -56,6 +56,10 @@ in
     enable = true;
     userName = "${gitUsername}";
     userEmail = "${gitEmail}";
+    signing = {
+      key = "${gitSigningKey}";
+      signByDefault = true;
+    };
   };
 
   # Create XDG Dirs
@@ -91,8 +95,7 @@ in
   };
   qt = {
     enable = true;
-    style.name = "adwaita-dark";
-    platformTheme.name = "gtk3";
+    style.name = "kvantum";
   };
 
 
@@ -117,6 +120,7 @@ in
 
   services = {
     hypridle = {
+      enable = true;
       settings = {
         general = {
           after_sleep_cmd = "hyprctl dispatch dpms on";
@@ -166,6 +170,53 @@ in
             enable = true;
             package = pkgs.starship;
      };
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      profileExtra = ''
+        #if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+        #  exec Hyprland
+        #fi
+      '';
+      initExtra = ''
+        fastfetch
+        if [ -f $HOME/.zshrc-personal ]; then
+          source $HOME/.zshrc-personal
+        fi
+        bindkey -v
+        bindkey '^R' history-incremental-search-backward
+        eval "$(zoxide init zsh)"
+        function y() {
+        	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        	yazi "$@" --cwd-file="$tmp"
+        	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        		builtin cd -- "$cwd"
+        	fi
+        	rm -f -- "$tmp"
+        }
+      '';
+      shellAliases = {
+        sv = "sudo nvim";
+        fr = "nh os switch --hostname ${host} /home/${username}/weasel-os";
+        fu = "nh os switch --hostname ${host} --update /home/${username}/weasel-os";
+        ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+        v = "nvim";
+        cat = "bat";
+        ls = "eza --icons";
+        ll = "eza -lh --icons --grid --group-directories-first";
+        la = "eza -lah --icons --grid --group-directories-first";
+        ".." = "cd ..";
+      };
+      syntaxHighlighting = {
+        enable = true;
+        highlighters = [
+          "brackets"
+          "cursor"
+          "root"
+          "line"
+        ];
+      };
+    };
     bash = {
       enable = true;
       enableCompletion = true;
@@ -179,12 +230,20 @@ in
         if [ -f $HOME/.bashrc-personal ]; then
           source $HOME/.bashrc-personal
         fi
+        eval "$(zoxide init bash)"
+        function y() {
+        	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+        	yazi "$@" --cwd-file="$tmp"
+        	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        		builtin cd -- "$cwd"
+        	fi
+        	rm -f -- "$tmp"
+        }
       '';
       shellAliases = {
         sv = "sudo nvim";
-        fr = "nh os switch --hostname ${host} /home/${username}/zaneyos";
-        fu = "nh os switch --hostname ${host} --update /home/${username}/zaneyos";
-        zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/raw/main/install-zaneyos.sh)";
+        fr = "nh os switch --hostname ${host} /home/${username}/weasel-os";
+        fu = "nh os switch --hostname ${host} --update /home/${username}/weasel-os";
         ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
         v = "nvim";
         cat = "bat";
@@ -204,7 +263,7 @@ in
           hide_cursor = true;
           no_fade_in = false;
         };
-        background = [
+        lib.mkPrio.background = [
           {
             path = "/home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg";
             blur_passes = 3;
@@ -223,7 +282,7 @@ in
             valign = "center";
           }
         ];
-        input-field = [
+        lib.mkPrio.input-field = [
           {
             size = "200, 50";
             position = "0, -80";

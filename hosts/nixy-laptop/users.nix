@@ -19,22 +19,12 @@ in
         "libvirtd"
         "scanner"
         "lp"
+        "docker"
       ];
       shell = pkgs.bash;
       ignoreShellProgramCheck = true;
       packages = with pkgs; [
-        webcord
-        zeroad
       ];
     };
-    # "newuser" = {
-    #   homeMode = "755";
-    #   isNormalUser = true;
-    #   description = "New user account";
-    #   extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
-    #   shell = pkgs.bash;
-    #   ignoreShellProgramCheck = true;
-    #   packages = with pkgs; [];
-    # };
   };
 }
