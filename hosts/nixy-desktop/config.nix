@@ -387,7 +387,7 @@ in
     fstrim.enable = true;
     gvfs.enable = true;
     openssh.enable = true;
-    flatpak.enable = false;
+    flatpak.enable = true;
     printing = {
       enable = true;
       drivers = [
