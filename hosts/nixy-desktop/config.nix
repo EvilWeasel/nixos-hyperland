@@ -237,6 +237,8 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    keymapp
+    wally-cli
     alarm-clock-applet
     alacritty # fallback term
     google-chrome
@@ -427,6 +429,9 @@ in
     #   extraBackends = [ pkgs.sane-airscan ];
     #   disabledDefaultBackends = [ "escl" ];
     # };
+
+  # ZSA Keyboard flashing udev rules
+  hardware.keyboard.zsa.enable = true;
 
   # Extra Logitech Support
   hardware.logitech.wireless.enable = true;
