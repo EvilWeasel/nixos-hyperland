@@ -237,6 +237,11 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    wineWowPackages.staging
+    winetricks
+    sl
+    dxvk_2
+    vkd3d-proton
     keymapp
     wally-cli
     alarm-clock-applet
@@ -263,7 +268,6 @@ in
     qbittorrent # :)
     meld # best diff-tool ever
     obsidian # best markdown editor ever
-    vesktop # hopefully this works with hyprland portal lol
     ## some dev stuff
     ## commented out -> try devshells first uwu
     # gcc

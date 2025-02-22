@@ -5,7 +5,6 @@
   config,
   ...
 }:
-
 let
   inherit (import ../hosts/${host}/variables.nix)
     browser
@@ -94,6 +93,16 @@ with lib;
           windowrulev2 = size 70% 70%, class:^(xdg-desktop-portal-gtk)$
           windowrulev2 = size 60% 70%, class:^(qt6ct)$
           windowrulev2 = size 60% 70%, class:^(file-roller|org.gnome.FileRoller)$
+
+          windowrulev2 = fullscreen,class:^steam_app\d+$
+          windowrulev2 = monitor 1,class:^steam_app_\d+$
+          windowrulev2 = workspace 1,class:^steam_app_\d+$
+          windowrulev2 = float, class:^(gamescope)$
+          windowrulev2 = noborder, class:^(gamescope)$
+          windowrulev2 = noshadow, class:^(gamescope)$
+
+
+
           gestures {
             workspace_swipe = true
             workspace_swipe_fingers = 3
