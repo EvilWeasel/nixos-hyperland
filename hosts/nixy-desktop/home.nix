@@ -8,6 +8,12 @@ let
   inherit (import ./variables.nix) gitUsername gitEmail gitSigningKey;
 in
 {
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
   # Home Manager Settings
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";

@@ -20,6 +20,7 @@ in
         "scanner"
         "lp"
         "docker"
+        "openrazer"
       ];
       shell = pkgs.bash;
       ignoreShellProgramCheck = true;

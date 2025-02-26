@@ -237,6 +237,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    razergenie
     wineWowPackages.staging
     winetricks
     sl
@@ -436,6 +437,9 @@ in
 
   # ZSA Keyboard flashing udev rules
   hardware.keyboard.zsa.enable = true;
+
+  # Razor peripherals
+  hardware.openrazer.enable = true;
 
   # Extra Logitech Support
   hardware.logitech.wireless.enable = true;
