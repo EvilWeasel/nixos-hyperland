@@ -237,6 +237,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    thunderbird
     razergenie
     wineWowPackages.staging
     winetricks
