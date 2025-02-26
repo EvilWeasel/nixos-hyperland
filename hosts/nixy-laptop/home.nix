@@ -8,6 +8,12 @@ let
   inherit (import ./variables.nix) gitUsername gitEmail gitSigningKey;
 in
 {
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = (_: true);
+    };
+  };
   # Home Manager Settings
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";
@@ -143,6 +149,10 @@ in
   };
 
   programs = {
+    vscode = {
+      enable = true;
+      package = pkgs.vscode.fhs;
+    };
     gh.enable = true;
     btop = {
       enable = true;
@@ -174,6 +184,7 @@ in
       enable = true;
       enableCompletion = true;
       profileExtra = ''
+        export XDG_DATA_DIRS=$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share
         #if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         #  exec Hyprland
         #fi
@@ -221,6 +232,7 @@ in
       enable = true;
       enableCompletion = true;
       profileExtra = ''
+        export XDG_DATA_DIRS=$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share
         #if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
         #  exec Hyprland
         #fi
