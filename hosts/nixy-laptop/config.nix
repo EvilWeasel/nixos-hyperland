@@ -246,6 +246,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    ouch
     razergenie
     wineWowPackages.staging
     winetricks
@@ -507,7 +508,12 @@ in
   };
 
   # Virtualization / Containers
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      swtpm.enable = true;
+    };
+  };
   virtualisation.docker.enable = true;
 
   # OpenGL
