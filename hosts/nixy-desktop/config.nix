@@ -237,6 +237,8 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    code-cursor
+    bun
     thunderbird
     razergenie
     wineWowPackages.staging

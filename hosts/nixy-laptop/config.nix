@@ -246,6 +246,9 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    code-cursor
+    bun
+    obs-studio
     thunderbird
     ouch
     razergenie

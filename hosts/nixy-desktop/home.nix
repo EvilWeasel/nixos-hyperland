@@ -84,6 +84,7 @@ in
   };
 
   # Styling Options
+  stylix.targets.vscode.enable = false;
   stylix.targets.waybar.enable = false;
   stylix.targets.rofi.enable = false;
   stylix.targets.hyprland.enable = false;
