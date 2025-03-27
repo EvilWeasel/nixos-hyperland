@@ -136,6 +136,7 @@ in
 
 
   programs = {
+    hyprland.enable = true; # may be needed for portals???
     firefox.enable = false;
     starship = {
       enable = true;
@@ -239,7 +240,17 @@ in
   environment.systemPackages = with pkgs; [
     code-cursor
     bun
+    libreoffice-qt
+    hunspell
+    hunspellDicts.en_US
+    hunspellDicts.de_DE
+    dotnetCorePackages.dotnet_9.sdk
+    dotnetCorePackages.dotnet_9.runtime
+    dotnetCorePackages.dotnet_9.aspnetcore
+    virtiofsd
+    remmina
     thunderbird
+    ouch
     razergenie
     wineWowPackages.staging
     winetricks
@@ -272,6 +283,7 @@ in
     qbittorrent # :)
     meld # best diff-tool ever
     obsidian # best markdown editor ever
+    vesktop # hopefully this works with hyprland portal lol
     ## some dev stuff
     ## commented out -> try devshells first uwu
     # gcc
@@ -344,6 +356,9 @@ in
       material-icons
     ];
   };
+  environment.sessionVariables = {
+    DOTNET_ROOT = "${pkgs.dotnetCorePackages.dotnet_9.sdk}";
+  };
 
   environment.variables = {
     ZANEYOS_VERSION = "2.3";
@@ -354,7 +369,7 @@ in
   # Extra Portal Configuration
   xdg.portal = {
     enable = true;
-    wlr.enable = true;
+    # wlr.enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal
@@ -368,6 +383,7 @@ in
 
   # Services to start
   services = {
+    desktopManager.plasma6.enable = true;
     xserver = {
       enable = false;
       xkb = {

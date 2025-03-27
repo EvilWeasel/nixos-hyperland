@@ -145,6 +145,7 @@ in
   };
 
   programs = {
+    hyprland.enable = true; # may be needed for portals???
     firefox.enable = false;
     starship = {
       enable = true;
@@ -249,6 +250,11 @@ in
     code-cursor
     bun
     obs-studio
+    dotnet_9.sdk
+    dotnet_9.runtime
+    dotnet_9.aspnetcore
+    virtiofsd
+    remmina
     thunderbird
     ouch
     razergenie

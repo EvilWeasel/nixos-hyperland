@@ -2,6 +2,7 @@
   pkgs,
   username,
   host,
+  lib,
   ...
 }:
 let
@@ -88,6 +89,8 @@ in
   stylix.targets.waybar.enable = false;
   stylix.targets.rofi.enable = false;
   stylix.targets.hyprland.enable = false;
+  stylix.targets.kde.enable = false;
+  stylix.targets.qt.enable = false;
   gtk = {
     iconTheme = {
       name = "Papirus-Dark";
@@ -101,8 +104,8 @@ in
     };
   };
   qt = {
-    enable = true;
-    style.name = "kvantum";
+    enable = lib.mkForce false;
+    # style.name = "kvantum";
   };
 
 
