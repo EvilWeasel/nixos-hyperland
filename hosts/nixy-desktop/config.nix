@@ -27,6 +27,9 @@ in
     # This is for OBS Virtual Cam Support
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+    '';
     # Needed For Some Steam Games
     kernel.sysctl = {
       "vm.max_map_count" = 2147483642;
@@ -122,6 +125,7 @@ in
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "de_DE.UTF-8";
     LC_IDENTIFICATION = "de_DE.UTF-8";
@@ -133,7 +137,6 @@ in
     LC_TELEPHONE = "de_DE.UTF-8";
     LC_TIME = "de_DE.UTF-8";
   };
-
 
   programs = {
     hyprland.enable = true; # may be needed for portals???
@@ -238,6 +241,9 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    protonvpn-gui
+    stremio
+    warp-terminal
     code-cursor
     bun
     libreoffice-qt
@@ -279,7 +285,6 @@ in
     heroic
     protonup # protonGE installer
     mangohud # ingame performance hud
-    microsoft-edge # work browser
     qbittorrent # :)
     meld # best diff-tool ever
     obsidian # best markdown editor ever
@@ -360,6 +365,15 @@ in
     DOTNET_ROOT = "${pkgs.dotnetCorePackages.dotnet_9.sdk}";
   };
 
+  environment.etc = {
+    "ovmf/edk2-x86_64-secure-code.fd" = {
+      source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-x86_64-secure-code.fd";
+    };
+    "ovmf/edk2-i386-vars.fd" = {
+      source = config.virtualisation.libvirtd.qemu.package + "/share/qemu/edk2-i386-vars.fd";
+    };
+  };
+
   environment.variables = {
     ZANEYOS_VERSION = "2.3";
     ZANEYOS = "true";
@@ -369,7 +383,7 @@ in
   # Extra Portal Configuration
   xdg.portal = {
     enable = true;
-    # wlr.enable = true;
+    wlr.enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
       pkgs.xdg-desktop-portal
@@ -520,6 +534,8 @@ in
     enable = true;
     qemu = {
       swtpm.enable = true;
+      ovmf.enable = true;
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
     };
   };
   virtualisation.docker.enable = true;

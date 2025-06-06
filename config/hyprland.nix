@@ -82,9 +82,9 @@ with lib;
             sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
             accel_profile = flat
           }
-          windowrule = noborder,^(wofi)$
-          windowrule = center,^(wofi)$
-          windowrule = float,^(steam)$
+          # windowrule = noborder,^(wofi)$
+          # windowrule = center,^(wofi)$
+          # windowrule = float,^(steam)$
           windowrulev2 = float, class:(xdg-desktop-portal-gtk)
           windowrulev2 = float, class:^(nwg-look|qt5ct|qt6ct)$
           windowrulev2 = float, class:^(nm-applet|nm-connection-editor|blueman-manager)$
@@ -95,7 +95,7 @@ with lib;
           windowrulev2 = minsize 1 1, title:^()$,class:^(steam)$
           windowrulev2 = opacity 0.9 0.7, class:^(thunar)$
           # Window Rules For Size
-          windowrule = size 1080 900, ^(steam)$
+          # windowrule = size 1080 900, ^(steam)$
           windowrulev2 = size 70% 70%, class:^(gnome-system-monitor|org.gnome.SystemMonitor)$
           windowrulev2 = size 70% 70%, class:^(xdg-desktop-portal-gtk)$
           windowrulev2 = size 60% 70%, class:^(qt6ct)$
