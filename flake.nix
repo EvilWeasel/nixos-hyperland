@@ -20,6 +20,9 @@
       host = "nixy-desktop";
       hostLaptop = "nixy-laptop";
       username = "evilweasel";
+      overlays = {
+        fontFix = import ./modules/overlays/font-fix.nix;
+      };
     in
     {
       nixosConfigurations = {
@@ -29,6 +32,7 @@
             inherit inputs;
             inherit username;
             inherit host;
+            inherit overlays;
           };
           modules = [
             ./hosts/${host}/config.nix

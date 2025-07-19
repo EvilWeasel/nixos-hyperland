@@ -1,15 +1,16 @@
 {
-  config,
-  pkgs,
-  host,
-  username,
-  options,
-  ...
+config,
+pkgs,
+host,
+username,
+options,
+overlays,
+...
 }:
 let
   inherit (import ./variables.nix) keyboardLayout consoleKeyMap;
 in
-{
+  {
   imports = [
     ./hardware.nix
     ./users.nix
@@ -19,6 +20,10 @@ in
     ../../modules/intel-drivers.nix
     ../../modules/vm-guest-services.nix
     ../../modules/local-hardware-clock.nix
+  ];
+
+  nixpkgs.overlays = [
+    overlays.fontFix
   ];
 
   boot = {
@@ -140,7 +145,7 @@ in
 
   programs = {
     hyprland.enable = true; # may be needed for portals???
-    firefox.enable = false;
+    firefox.enable = true;
     starship = {
       enable = true;
       settings = {
@@ -241,6 +246,11 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    vulkan-tools
+    vulkan-loader
+    vulkan-headers
+    stdenv.cc.cc.lib
+    libGL
     protonvpn-gui
     stremio
     warp-terminal
@@ -460,13 +470,13 @@ in
     path = [ pkgs.flatpak ];
     script = ''
       flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    '';
+      '';
   };
-    # hardware.sane = {
-    #   enable = true;
-    #   extraBackends = [ pkgs.sane-airscan ];
-    #   disabledDefaultBackends = [ "escl" ];
-    # };
+  # hardware.sane = {
+  #   enable = true;
+  #   extraBackends = [ pkgs.sane-airscan ];
+  #   disabledDefaultBackends = [ "escl" ];
+  # };
 
   # ZSA Keyboard flashing udev rules
   hardware.keyboard.zsa.enable = true;
@@ -544,6 +554,10 @@ in
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
+    extraPackages = with pkgs; [
+      vulkan-loader
+      vulkan-headers
+    ];
   };
 
   console.keyMap = "${consoleKeyMap}";
