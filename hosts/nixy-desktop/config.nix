@@ -22,9 +22,9 @@ in
     ../../modules/local-hardware-clock.nix
   ];
 
-  nixpkgs.overlays = [
-    overlays.fontFix
-  ];
+  # nixpkgs.overlays = [
+  #   overlays.fontFix
+  # ];
 
   boot = {
     # Kernel
@@ -246,6 +246,14 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    # GStreamer and media plugins for Wine
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    # Vulkan for DXVK and other Graphics
     vulkan-tools
     vulkan-loader
     vulkan-headers
@@ -290,7 +298,9 @@ in
     p7zip-rar # archive extraction and preview
     ffmpeg # because the entire world of video runs on ffmpeg
     # wine prefix managers
-    bottles
+    (bottles.override {
+      removeWarningPopup = true;
+    })
     lutris
     heroic
     protonup # protonGE installer
@@ -417,7 +427,7 @@ in
     };
     greetd = {
       enable = true;
-      vt = 3;
+      # vt = 3; Deprecated
       settings = {
         default_session = {
           # Wayland Desktop Manager is installed only for user via home-manager!
