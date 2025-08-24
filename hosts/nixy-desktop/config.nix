@@ -113,8 +113,8 @@ in
   drivers.nvidia.enable = true;
   drivers.nvidia-prime = {
     enable = false;
-    intelBusID = "";
-    nvidiaBusID = "";
+    # intelBusID = "";
+    # nvidiaBusID = "";
   };
   drivers.intel.enable = false;
   vm.guest-services.enable = false;
@@ -278,6 +278,7 @@ in
     razergenie
     wineWowPackages.staging
     winetricks
+    wineWowPackages.waylandFull
     sl
     dxvk_2
     vkd3d-proton
@@ -567,6 +568,10 @@ in
     extraPackages = with pkgs; [
       vulkan-loader
       vulkan-headers
+      vulkan-tools
+      vulkan-validation-layers
+      vulkan-extension-layer
+      vulkan-utility-libraries
     ];
   };
 
