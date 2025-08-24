@@ -191,7 +191,7 @@ in
         #  exec Hyprland
         #fi
       '';
-      initExtra = ''
+      initContent = ''
         fastfetch
         if [ -f $HOME/.zshrc-personal ]; then
           source $HOME/.zshrc-personal

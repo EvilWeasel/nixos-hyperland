@@ -173,7 +173,7 @@ with lib;
           bind = ${modifier},T,exec,thunar
           bind = ${modifier},M,exec,spotify
           bind = ${modifier},Q,killactive,
-          bind = ${modifier}SHIFT,Q,hyperctl kill
+          bind = ${modifier}SHIFT,Q,exec, hyprctl kill
           bind = ${modifier},P,pseudo,
           bind = ${modifier}SHIFT,I,togglesplit,
           bind = ${modifier},F,fullscreen,
