@@ -246,6 +246,18 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    # KDE
+    # kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
+    kdePackages.kcalc # Calculator
+    kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
+    kdePackages.kclock # Clock app
+    kdePackages.kcolorchooser # A small utility to select a color
+    kdePackages.kolourpaint # Easy-to-use paint program
+    kdePackages.ksystemlog # KDE SystemLog Application
+    kdePackages.sddm-kcm # Configuration module for SDDM
+    kdiff3 # Compares and merges 2 or 3 files or directories
+    kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
+    kdePackages.partitionmanager # Optional: Manage the disk devices, partitions and file systems on your computer
     # GStreamer and media plugins for Wine
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -260,7 +272,7 @@ in
     stdenv.cc.cc.lib
     libGL
     protonvpn-gui
-    stremio
+    #stremio
     warp-terminal
     code-cursor
     bun
@@ -273,7 +285,7 @@ in
     dotnetCorePackages.dotnet_9.aspnetcore
     virtiofsd
     remmina
-    thunderbird
+    # thunderbird
     ouch
     razergenie
     wineWowPackages.staging
@@ -589,5 +601,5 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }

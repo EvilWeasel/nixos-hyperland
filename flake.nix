@@ -17,8 +17,8 @@
     { nixpkgs, home-manager, nixos-hardware, ... }@inputs:
     let
       system = "x86_64-linux";
-      host = "nixy-desktop";
-      hostLaptop = "nixy-laptop";
+      host = "weaselos-desktop";
+      hostLaptop = "weaselos-laptop";
       username = "evilweasel";
       overlays = {
         fontFix = import ./modules/overlays/font-fix.nix;

@@ -8,42 +8,38 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "nvidia" "i915" "nvidia_modeset" "nvidia_drm" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/0a980a8e-4a7e-4b06-957d-e85a386b7062";
+    { device = "/dev/disk/by-label/NIXROOT";
       fsType = "btrfs";
       options = [ "subvol=@" ];
     };
 
-  fileSystems."/.snapshots" =
-    { device = "/dev/disk/by-uuid/0a980a8e-4a7e-4b06-957d-e85a386b7062";
-      fsType = "btrfs";
-      options = [ "subvol=@.snapshots" ];
-    };
-
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/0a980a8e-4a7e-4b06-957d-e85a386b7062";
+    { device = "/dev/disk/by-label/NIXROOT";
       fsType = "btrfs";
       options = [ "subvol=@home" ];
     };
 
+
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B081-52DA";
+    { device = "/dev/disk/by-label/NIXBOOT";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  fileSystems."/home/evilweasel/fastboi" =
-    { device = "/dev/disk/by-uuid/c2164edc-6381-4245-8022-bf7c849686f2";
+  fileSystems."/home/evilweasel/fastboy" =
+    { device = "/dev/disk/by-label/fastboy";
       fsType = "btrfs";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/390998d5-72bb-4b56-bc4b-1fd23f3881e3"; }
+    [ { device = "/dev/disk/by-label/SWAP"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
