@@ -110,10 +110,7 @@ with lib;
 
 
 
-          gestures {
-            workspace_swipe = true
-            workspace_swipe_fingers = 3
-          }
+          gesture = 3, horizontal, workspace
           misc {
             initial_workspace_tracking = 0
             mouse_move_enables_dpms = true

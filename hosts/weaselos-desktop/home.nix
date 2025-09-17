@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   username,
   host,
@@ -7,6 +8,11 @@
 }:
 let
   inherit (import ./variables.nix) gitUsername gitEmail gitSigningKey;
+  dotfiles = "${config.home.homeDirectory}/weasel-os/dotfiles";
+  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
+  configs = {
+    quickshell = "quickshell";
+  };
 in
 {
   nixpkgs = {
@@ -19,6 +25,11 @@ in
   home.username = "${username}";
   home.homeDirectory = "/home/${username}";
   home.stateVersion = "24.11";
+
+  xdg.configFile = builtins.mapAttrs (name: subpath: {
+    source = create_symlink "${dotfiles}/${subpath}";
+    recursive = true;
+  }) configs;
 
   # Import Program Configurations
   imports = [
@@ -108,7 +119,6 @@ in
     # style.name = "kvantum";
   };
 
-
   # Scripts
   home.packages = [
     (import ../../scripts/emopicker9000.nix { inherit pkgs; })
@@ -153,6 +163,29 @@ in
   };
 
   programs = {
+    # caelestia = {
+    #   enable = true;
+    #   systemd = {
+    #     enable = true;
+    #     target = "graphical-session.target";
+    #   };
+    #   settings = {
+    #     bar.status = {
+    #       showBattery = false;
+    #     };
+    #     path.wallpaperDir = "~/Pictures/Wallpapers";
+    #   };
+    #   cli = {
+    #     enable = true;
+    #     settings = {
+    #       theme.enableGtk = false;
+    #     };
+    #   };
+    # };
+    quickshell = {
+      enable = true;
+      systemd.enable = true;
+    };
     vscode = {
       enable = true;
       package = pkgs.vscode.fhs;
